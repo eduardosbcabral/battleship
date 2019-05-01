@@ -1,7 +1,6 @@
 package com.uniceub.battleship.models.boards;
 
 import com.uniceub.battleship.enums.GameStates;
-import com.uniceub.battleship.models.game.Game;
 
 public class Panel {
 
@@ -34,5 +33,9 @@ public class Panel {
 
     public GameStates getType() {
         return type;
+    }
+
+    public void setType(GameStates type) {
+        this.type = type;
     }
 }

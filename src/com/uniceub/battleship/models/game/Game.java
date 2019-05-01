@@ -21,8 +21,7 @@ public class Game {
         player2.outputBoards();
     }
 
-    public void playRound()
-    {
+    public void playRound() {
         //Each exchange of shots is called a Round.
         //One round = Player 1 fires a shot, then Player 2 fires a shot.
         Coordinates coordinates = this.player1.fireShot();
@@ -37,22 +36,17 @@ public class Game {
         }
     }
 
-    public void playToEnd()
-    {
-        while (!this.player1.hasLost() && !this.player2.hasLost())
-        {
+    public void playToEnd() {
+        while (!this.player1.hasLost() && !this.player2.hasLost()) {
             playRound();
         }
 
         this.player1.outputBoards();
         this.player2.outputBoards();
 
-        if (this.player1.hasLost())
-        {
+        if (this.player1.hasLost()) {
             System.out.println(this.player2.name + " has won the game!");
-        }
-        else if (this.player2.hasLost())
-        {
+        } else if (this.player2.hasLost()) {
             System.out.println(this.player1.name + " has won the game!");
         }
     }
