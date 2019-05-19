@@ -12,24 +12,30 @@ import com.uniceub.battleship.models.ships.Cruizer;
 import com.uniceub.battleship.models.ships.Ship;
 import com.uniceub.battleship.models.ships.Submarine;
 
+import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-public class Player {
+public class PlayerRemote2 extends UnicastRemoteObject implements IPlayer {
 
     public String name;
     public GameBoard gameBoard;
     public FiringBoard firingBoard;
     public ArrayList<Ship> ships;
     Scanner scanner = new Scanner(System.in);
+    private Coordinates shotCoordinates;
 
     public boolean hasLost() {
         return ships.stream().allMatch(x -> x.isSunk());
     }
 
-    public Player(String name) {
+    public PlayerRemote2(String name) throws RemoteException {
+
         this.name = name;
 
         this.ships = new ArrayList<Ship>();
@@ -151,8 +157,41 @@ public class Player {
         } else {
             panel.type = GameStates.Miss;
         }
+    }
 
+    public void playRound() {
+
+        try {
+            Coordinates coordinates = this.fireShot();
+
+            PlayerRemote player1 = (PlayerRemote) Naming.lookup("rmi://127.0.0.1:6667/Player1");
+
+            ShotResult result = player1.processShotRemote(coordinates);
+            this.processShotResult(coordinates, result);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public Coordinates fireShotRemote() throws RemoteException {
+        return this.fireShot();
+    }
+
+    @Override
+    public void outputBoardsRemote() throws RemoteException {
         this.outputBoards();
     }
 
+    @Override
+    public ShotResult processShotRemote(Coordinates coordinates) throws RemoteException {
+        return this.processShot(coordinates);
+    }
+
+    @Override
+    public boolean hasLostRemote() throws RemoteException {
+        return this.hasLost();
+    }
 }

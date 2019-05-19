@@ -19,6 +19,7 @@ public class Game {
 
         player1.outputBoards();
         player2.outputBoards();
+
     }
 
     public void playRound() {
